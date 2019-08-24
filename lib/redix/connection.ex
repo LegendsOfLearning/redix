@@ -153,7 +153,7 @@ defmodule Redix.Connection do
   # the socket owner to die so that it can finish processing the data it's processing. When it's
   # dead, we go ahead and notify the remaining clients, setup backoff, and so on.
   def disconnected(:info, {:stopped, owner, reason}, %__MODULE__{socket_owner: owner} = data) do
-    :telemetry.execute([:redix, :disconnection], %{}, %{
+    :telemetry.execute([:redix, :disconnection], 0, %{
       connection: data.opts[:name] || self(),
       address: data.connected_address,
       reason: %ConnectionError{reason: reason}
@@ -169,7 +169,7 @@ defmodule Redix.Connection do
         %__MODULE__{socket_owner: owner} = data
       ) do
     if data.backoff_current do
-      :telemetry.execute([:redix, :reconnection], %{}, %{
+      :telemetry.execute([:redix, :reconnection], 0, %{
         connection: data.opts[:name] || self(),
         address: address
       })
@@ -185,7 +185,7 @@ defmodule Redix.Connection do
 
   def connecting(:info, {:stopped, owner, reason}, %__MODULE__{socket_owner: owner} = data) do
     # We log this when the socket owner stopped while connecting.
-    :telemetry.execute([:redix, :failed_connection], %{}, %{
+    :telemetry.execute([:redix, :failed_connection], 0, %{
       connection: data.opts[:name] || self(),
       address: format_address(data),
       reason: %ConnectionError{reason: reason}
@@ -230,7 +230,7 @@ defmodule Redix.Connection do
   end
 
   def connected(:info, {:stopped, owner, reason}, %__MODULE__{socket_owner: owner} = data) do
-    :telemetry.execute([:redix, :disconnection], %{}, %{
+    :telemetry.execute([:redix, :disconnection], 0, %{
       connection: data.opts[:name] || self(),
       address: data.connected_address,
       reason: %ConnectionError{reason: reason}

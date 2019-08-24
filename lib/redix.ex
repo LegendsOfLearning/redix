@@ -776,13 +776,14 @@ defmodule Redix do
     case Redix.Connection.pipeline(conn, commands, timeout) do
       {:ok, response} ->
         end_time = System.monotonic_time()
-        measurements = %{elapsed_time: end_time - start_time}
+        #measurements = %{elapsed_time: end_time - start_time}
+        measurements = end_time - start_time
         :ok = :telemetry.execute([:redix, :pipeline], measurements, telemetry_metadata)
         {:ok, response}
 
       {:error, reason} ->
         telemetry_metadata = Map.put(telemetry_metadata, :reason, reason)
-        :ok = :telemetry.execute([:redix, :pipeline, :error], %{}, telemetry_metadata)
+        :ok = :telemetry.execute([:redix, :pipeline, :error], 0, telemetry_metadata)
         {:error, reason}
     end
   end

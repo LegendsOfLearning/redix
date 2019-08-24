@@ -324,10 +324,10 @@ defmodule RedixTest do
       parent = self()
       ref = make_ref()
 
-      handler = fn event, measurements, meta, _config ->
+      handler = fn event, elapsed_time, meta, _config ->
         if meta.connection == c do
           assert event == [:redix, :pipeline]
-          assert is_integer(measurements.elapsed_time) and measurements.elapsed_time > 0
+          assert is_integer(elapsed_time) and elapsed_time > 0
           assert meta.commands == [["PING"]]
           assert is_integer(meta.start_time)
         end
@@ -353,7 +353,7 @@ defmodule RedixTest do
       handler = fn event, measurements, meta, _config ->
         if meta.connection == c do
           assert event == [:redix, :pipeline, :error]
-          assert measurements == %{}
+          assert measurements == 0
           assert meta.commands == [["PING"], ["PING"]]
           assert is_integer(meta.start_time)
           assert meta.reason == %ConnectionError{reason: :timeout}

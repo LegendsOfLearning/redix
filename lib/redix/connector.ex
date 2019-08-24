@@ -92,7 +92,7 @@ defmodule Redix.Connector do
           {:ok, server_socket, "#{server_host}:#{server_port}"}
         else
           {:error, reason} ->
-            :telemetry.execute([:redix, :failed_connection], %{}, %{
+            :telemetry.execute([:redix, :failed_connection], 0, %{
               reason: reason,
               sentinel_address: format_host(sentinel)
             })
@@ -102,7 +102,7 @@ defmodule Redix.Connector do
         end
 
       {:error, reason} ->
-        :telemetry.execute([:redix, :failed_connection], %{}, %{
+        :telemetry.execute([:redix, :failed_connection], 0, %{
           reason: reason,
           sentinel_address: format_host(sentinel)
         })

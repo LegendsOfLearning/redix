@@ -51,7 +51,7 @@ defmodule Redix.Mixfile do
 
   defp deps() do
     [
-      {:telemetry, "~> 0.4.0"},
+      {:telemetry, "~> 0.3.0"},
       {:castore, "~> 0.1.0", optional: true},
       {:ex_doc, "~> 0.19", only: :dev},
       {:dialyxir, "~> 1.0.0-rc.6", only: :dev},
